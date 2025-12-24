@@ -1,4 +1,4 @@
-# HeartGuard AI - Heart Disease Prediction
+# PredictML - Heart Disease Prediction
 
 HeartGuard AI is a web application designed to predict heart disease risk based on patient information. It uses a machine learning model to predict the likelihood of heart disease and allows users to make predictions via manual data entry or CSV file upload.
 
@@ -21,7 +21,7 @@ HeartGuard AI is a web application designed to predict heart disease risk based 
 
 1. Clone this repository to your local machine:
    ```bash
-   git clone https://github.com/yourusername/heartguard-ai.git
+   git clone https://github.com/yourusername/Predictml.git
 
 2. Create a virtual environment:
 ```bash
