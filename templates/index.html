@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HeartGuard AI - Heart Disease Prediction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container navbar-content">
+            <a href="/" class="navbar-brand">
+                <i class="fas fa-heartbeat"></i>
+                HeartGuard AI
+            </a>
+            <div>
+                <a href="/predict" class="btn btn-outline">
+                    <i class="fas fa-chart-line"></i>Start Prediction
+                </a>
+                <button onclick="toggleTheme()" class="btn btn-outline">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <h1 class="animate-fade-in-up">Predict Heart Disease Risk with AI</h1>
+            <p class="animate-fade-in-up" style="animation-delay: 0.2s;">Our advanced machine learning model analyzes patient data to provide accurate predictions for heart disease risk assessment.</p>
+            <a href="/predict" class="btn btn-primary animate-fade-in-up" style="animation-delay: 0.4s;">
+                <i class="fas fa-play"></i>Start Prediction
+            </a>
+        </div>
+    </section>
+
+    <main class="container" style="padding: 4rem 0;">
+        <h2 class="text-center animate-fade-in-up" style="margin-bottom: 2rem;">How It Works</h2>
+        <div class="row" style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+            <div class="card animate-fade-in-up" style="flex-basis: calc(33.333% - 1rem); animation-delay: 0.2s;">
+                <i class="fas fa-user-md feature-icon"></i>
+                <h3>Input Data</h3>
+                <p>Enter patient information manually or upload a CSV file with multiple patient records.</p>
+            </div>
+            <div class="card animate-fade-in-up" style="flex-basis: calc(33.333% - 1rem); animation-delay: 0.4s;">
+                <i class="fas fa-brain feature-icon"></i>
+                <h3>AI Analysis</h3>
+                <p>Our AI model processes the data using state-of-the-art machine learning algorithms.</p>
+            </div>
+            <div class="card animate-fade-in-up" style="flex-basis: calc(33.333% - 1rem); animation-delay: 0.6s;">
+                <i class="fas fa-chart-bar feature-icon"></i>
+                <h3>Get Results</h3>
+                <p>Receive detailed prediction results that can be downloaded in various formats.</p>
+            </div>
+        </div>
+
+        <h2 class="text-center animate-fade-in-up" style="margin: 4rem 0 2rem;">Why Choose HeartGuard AI?</h2>
+        <div class="row" style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+            <div class="card animate-fade-in-up" style="flex-basis: calc(50% - 1rem); animation-delay: 0.2s;">
+                <i class="fas fa-bullseye feature-icon"></i>
+                <h3>High Accuracy</h3>
+                <p>Our model has been trained on extensive datasets to provide highly accurate predictions of heart disease risk.</p>
+            </div>
+            <div class="card animate-fade-in-up" style="flex-basis: calc(50% - 1rem); animation-delay: 0.4s;">
+                <i class="fas fa-bolt feature-icon"></i>
+                <h3>Fast and Efficient</h3>
+                <p>Get instant results for individual predictions and quick processing for large datasets.</p>
+            </div>
+            <div class="card animate-fade-in-up" style="flex-basis: calc(50% - 1rem); animation-delay: 0.6s;">
+                <i class="fas fa-lock feature-icon"></i>
+                <h3>Secure and Private</h3>
+                <p>We prioritize the security and privacy of your medical data with state-of-the-art encryption.</p>
+            </div>
+            <div class="card animate-fade-in-up" style="flex-basis: calc(50% - 1rem); animation-delay: 0.8s;">
+                <i class="fas fa-sync-alt feature-icon"></i>
+                <h3>Regularly Updated</h3>
+                <p>Our AI model is continuously improved with the latest medical research and data.</p>
+            </div>
+        </div>
+
+        <div class="text-center" style="margin-top: 4rem;">
+            <a href="/predict" class="btn btn-primary animate-fade-in-up">
+                <i class="fas fa-stethoscope"></i>Try HeartGuard AI Now
+            </a>
+        </div>
+    </main>
+
+    <footer style="background-color: var(--card); color: var(--card-foreground); padding: 2rem 0; margin-top: 2rem;">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <p>&copy; 2024 HeartGuard AI. All rights reserved.</p>
+                <div>
+                    <a href="#" class="btn btn-outline"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="btn btn-outline"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="btn btn-outline"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
+        }
+
+        // Check for saved theme preference or system preference
+        const savedTheme = localStorage.getItem('theme');
+        const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+            document.body.classList.add('dark-theme');
+        }
+    </script>
+</body>
+</html>
+

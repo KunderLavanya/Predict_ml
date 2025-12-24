@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Results - HeartGuard AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container navbar-content">
+            <a href="/" class="navbar-brand">
+                <i class="fas fa-heartbeat" style="margin-right: 0.5rem;"></i>
+                HeartGuard AI
+            </a>
+            <div>
+                <a href="/predict" class="btn btn-outline" style="margin-right: 0.5rem;">
+                    <i class="fas fa-chart-line" style="margin-right: 0.5rem;"></i>New Prediction
+                </a>
+                <button onclick="toggleTheme()" class="btn btn-outline">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <h1 class="animate-fade-in-up">Prediction Results</h1>
+            <p class="animate-fade-in-up" style="animation-delay: 0.2s;">Analysis completed successfully</p>
+        </div>
+    </section>
+
+    <main class="container" style="padding: 2rem 0;">
+        {% if error %}
+        <div class="card animate-fade-in-up" style="border-left: 4px solid var(--danger); animation-delay: 0.4s;">
+            <h2 style="color: var(--danger); margin-bottom: 0.5rem;">
+                <i class="fas fa-exclamation-triangle" style="margin-right: 0.5rem;"></i>Error
+            </h2>
+            <p>{{ error }}</p>
+        </div>
+        {% else %}
+            {% if result %}
+            <div class="card animate-fade-in-up" style="animation-delay: 0.4s;">
+                <h2 style="margin-bottom: 1rem;">
+                    <i class="fas fa-heartbeat" style="margin-right: 0.5rem;"></i>Heart Disease Risk
+                </h2>
+                <p class="result-text {{ 'danger' if result == 'Yes' else 'success' }}">
+                    {{ result }}
+                </p>
+                <p style="margin-top: 1rem;">
+                    {% if result == 'Yes' %}
+                    <i class="fas fa-exclamation-circle" style="margin-right: 0.5rem; color: var(--danger);"></i>
+                    <p><i class="fas fa-exclamation-circle"></i> The analysis indicates a potential risk of heart disease.</p>
+                                <p><i class="fas fa-user-md"></i> Please consult with a healthcare professional for a thorough evaluation.</p>
+                                <p><i class="fas fa-heartbeat"></i> Monitor your cardiovascular health closely and consider lifestyle changes.</p>
+                    {% else %}
+                    <i class="fas fa-check-circle" style="margin-right: 0.5rem; color: var(--success);"></i>
+                    <p><i class="fas fa-check-circle"></i> The analysis indicates a lower risk of heart disease.</p>
+                    <p><i class="fas fa-calendar-check"></i> Continue to maintain regular check-ups with your healthcare provider.</p>
+                    <p><i class="fas fa-apple-alt"></i> Keep up with a healthy lifestyle for optimal heart health.</p>
+                   {% endif %}
+                </p>
+            </div>
+            {% endif %}
+
+            {% if table %}
+            <div class="card animate-fade-in-up" style="animation-delay: 0.6s;">
+                <h2 style="margin-bottom: 1rem;">
+                    <i class="fas fa-table" style="margin-right: 0.5rem;"></i>Batch Prediction Results
+                </h2>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search results...">
+                </div>
+                <div class="table-container">
+                    <table id="resultsTable" class="table">
+                        {{ table|safe }}
+                    </table>
+                </div>
+                <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                    <button onclick="exportTableToCSV()" class="btn btn-outline">
+                        <i class="fas fa-file-csv" style="margin-right: 0.5rem;"></i>Download CSV
+                    </button>
+                    <button onclick="exportTableToExcel()" class="btn btn-outline">
+                        <i class="fas fa-file-excel" style="margin-right: 0.5rem;"></i>Export to Excel
+                    </button>
+                    <button onclick="printResults()" class="btn btn-outline">
+                        <i class="fas fa-print" style="margin-right: 0.5rem;"></i>Print Results
+                    </button>
+                </div>
+            </div>
+            {% endif %}
+        {% endif %}
+    </main>
+
+    <footer style="background-color: var(--card); color: var(--card-foreground); padding: 2rem 0; margin-top: 2rem;">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <p>&copy; 2024 HeartGuard AI. All rights reserved.</p>
+                <div>
+                    <a href="#" class="btn btn-outline" style="margin-right: 0.5rem;"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="btn btn-outline" style="margin-right: 0.5rem;"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="btn btn-outline"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+    <script>
+        // Search functionality
+        document.getElementById('searchInput')?.addEventListener('keyup', function() {
+            var input = this.value.toUpperCase();
+            var table = document.getElementById('resultsTable');
+            if (!table) return;
+
+            var tr = table.getElementsByTagName('tr');
+            for (var i = 0; i < tr.length; i++) {
+                var td = tr[i].getElementsByTagName('td');
+                var visible = false;
+                for (var j = 0; j < td.length; j++) {
+                    if (td[j]) {
+                        var text = td[j].textContent || td[j].innerText;
+                        if (text.toUpperCase().indexOf(input) > -1) {
+                            visible = true;
+                            break;
+                        }
+                    }
+                }
+                tr[i].style.display = visible ? '' : 'none';
+            }
+        });
+
+        // Export to CSV
+        function exportTableToCSV() {
+            const table = document.getElementById('resultsTable');
+            if (!table) return;
+
+            const rows = table.querySelectorAll('tr');
+            const csv = Array.from(rows)
+                .map(row =>
+                    Array.from(row.cells)
+                        .map(cell => cell.textContent)
+                        .join(',')
+                )
+                .join('\n');
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'heart_disease_predictions.csv';
+            link.click();
+        }
+
+        // Export to Excel
+        function exportTableToExcel() {
+            const table = document.getElementById('resultsTable');
+            if (!table) return;
+
+            const wb = XLSX.utils.table_to_book(table, { sheet: 'Predictions' });
+            XLSX.writeFile(wb, 'heart_disease_predictions.xlsx');
+        }
+
+        // Print results
+        function printResults() {
+            window.print();
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
+        }
+
+        // Check for saved theme preference or system preference
+        const savedTheme = localStorage.getItem('theme');
+        const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+            document.body.classList.add('dark-theme');
+        }
+    </script>
+</body>
+</html>
+

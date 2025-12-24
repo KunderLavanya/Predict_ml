@@ -1,0 +1,28 @@
+# Ignore the virtual environment
+venv/
+
+# Ignore Python bytecode files
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore log files
+*.log
+
+# Ignore Flask's default SQLite database
+instance/
+*.db
+*.sqlite
+
+# Ignore the environment configuration files (optional)
+.env
+.venv
+
+# Ignore IDE files (Optional - if you're using specific IDEs)
+.vscode/
+.idea/

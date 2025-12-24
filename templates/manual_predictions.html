@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Predictions - HeartGuard AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border: 1px solid var(--card);
+            border-radius: 8px;
+            padding: 0.5rem;
+            background: var(--background);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--card);
+        }
+        th {
+            background-color: var(--card);
+            color: var(--card-foreground);
+            font-weight: 600;
+        }
+        tr:hover {
+            background-color: var(--hover);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container navbar-content">
+            <a href="/" class="navbar-brand">
+                <i class="fas fa-heartbeat" style="margin-right: 0.5rem;"></i>
+                HeartGuard AI
+            </a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <h1 class="animate-fade-in-up">Manual Predictions</h1>
+            <p class="animate-fade-in-up" style="animation-delay: 0.2s;">View all manually submitted predictions.</p>
+        </div>
+    </section>
+
+    <main class="container" style="padding: 2rem 0;">
+        <div class="card animate-fade-in-up" style="animation-delay: 0.4s;">
+            <h2 style="margin-bottom: 1rem;">Submitted Predictions</h2>
+            {% if predictions %}
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Age</th>
+                                <th>Sex</th>
+                                <th>Chest Pain</th>
+                                <th>Resting BP</th>
+                                <th>Cholesterol</th>
+                                <th>Fasting Blood Sugar</th>
+                                <th>Resting ECG</th>
+                                <th>Max Heart Rate</th>
+                                <th>Exercise Angina</th>
+                                <th>ST Depression</th>
+                                <th>Slope</th>
+                                <th>Major Vessels</th>
+                                <th>Thalassemia</th>
+                                <th>Result</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for prediction in predictions %}
+                                <tr>
+                                    <td>{{ prediction.name }}</td>
+                                    <td>{{ prediction.email }}</td>
+                                    <td>{{ prediction.age }}</td>
+                                    <td>{{ prediction.sex }}</td>
+                                    <td>{{ prediction.cp }}</td>
+                                    <td>{{ prediction.trestbps }}</td>
+                                    <td>{{ prediction.chol }}</td>
+                                    <td>{{ prediction.fbs }}</td>
+                                    <td>{{ prediction.restecg }}</td>
+                                    <td>{{ prediction.thalach }}</td>
+                                    <td>{{ prediction.exang }}</td>
+                                    <td>{{ prediction.oldpeak }}</td>
+                                    <td>{{ prediction.slope }}</td>
+                                    <td>{{ prediction.ca }}</td>
+                                    <td>{{ prediction.thal }}</td>
+                                    <td>{{ prediction.result }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p>No predictions found.</p>
+            {% endif %}
+        </div>
+    </main>
+
+    <footer style="background-color: var(--card); color: var(--card-foreground); padding: 2rem 0; margin-top: 2rem;">
+        <div class="container">
+            <p>&copy; 2024 HeartGuard AI. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

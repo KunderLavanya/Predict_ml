@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make Prediction - HeartGuard AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container navbar-content">
+            <a href="/" class="navbar-brand">
+                <i class="fas fa-heartbeat" style="margin-right: 0.5rem;"></i>
+                HeartGuard AI
+            </a>
+            <button onclick="toggleTheme()" class="btn btn-outline">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <h1 class="animate-fade-in-up">Make a Prediction</h1>
+            <p class="animate-fade-in-up" style="animation-delay: 0.2s;">Enter patient data manually or upload a CSV file</p>
+        </div>
+    </section>
+
+    <main class="container" style="padding: 2rem 0;">
+        <div class="card animate-fade-in-up" style="animation-delay: 0.4s;">
+            <h2 style="margin-bottom: 1rem;">Prediction Method</h2>
+            <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                <button onclick="showTab('manual')" id="manualTab" class="btn btn-outline">
+                    <i class="fas fa-keyboard" style="margin-right: 0.5rem;"></i>Manual Input
+                </button>
+                <button onclick="showTab('csv')" id="csvTab" class="btn btn-outline">
+                    <i class="fas fa-file-csv" style="margin-right: 0.5rem;"></i>CSV Upload
+                </button>
+            </div>
+            
+            <div id="manualForm">
+                <form action="/predict" method="POST">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <div class="form-group">
+                            <label for="name" class="form-label">Patient Name</label>
+                            <input type="text" id="name" name="name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="form-label">Patient Email</label>
+                            <input type="email" id="email" name="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="age" class="form-label">Age</label>
+                            <input type="number" id="age" name="age" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="sex" class="form-label">Sex</label>
+                            <input type="number" id="sex" name="sex" class="form-control" required min="0" max="1" placeholder="0 for Female, 1 for Male">
+                        </div>
+                        <div class="form-group">
+                            <label for="cp" class="form-label">Chest Pain Type</label>
+                            <input type="number" id="cp" name="cp" class="form-control" required min="0" max="3">
+                        </div>
+                        <div class="form-group">
+                            <label for="trestbps" class="form-label">Resting Blood Pressure</label>
+                            <input type="number" id="trestbps" name="trestbps" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="chol" class="form-label">Cholesterol</label>
+                            <input type="number" id="chol" name="chol" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fbs" class="form-label">Fasting Blood Sugar</label>
+                            <input type="number" id="fbs" name="fbs" class="form-control" required min="0" max="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="restecg" class="form-label">Resting ECG</label>
+                            <input type="number" id="restecg" name="restecg" class="form-control" required min="0" max="2">
+                        </div>
+                        <div class="form-group">
+                            <label for="thalach" class="form-label">Max Heart Rate</label>
+                            <input type="number" id="thalach" name="thalach" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exang" class="form-label">Exercise Induced Angina</label>
+                            <input type="number" id="exang" name="exang" class="form-control" required min="0" max="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="oldpeak" class="form-label">ST Depression</label>
+                            <input type="number" id="oldpeak" name="oldpeak" class="form-control" step="0.1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="slope" class="form-label">Slope of Peak Exercise ST</label>
+                            <input type="number" id="slope" name="slope" class="form-control" required min="0" max="2">
+                        </div>
+                        <div class="form-group">
+                            <label for="ca" class="form-label">Number of Major Vessels</label>
+                            <input type="number" id="ca" name="ca" class="form-control" min="0" max="3" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="thal" class="form-label">Thalassemia</label>
+                            <input type="number" id="thal" name="thal" class="form-control" required min="1" max="3">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">
+                        <i class="fas fa-heart" style="margin-right: 0.5rem;"></i>Make Prediction
+                    </button>
+                </form>
+            </div>
+            
+
+            <div id="csvForm" style="display: none;">
+                <form action="/predict" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="file" class="form-label">Upload CSV File</label>
+                        <input type="file" id="file" name="file" class="form-control" accept=".csv" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">
+                        <i class="fas fa-upload" style="margin-right: 0.5rem;"></i>Upload and Predict
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer style="background-color: var(--card); color: var(--card-foreground); padding: 2rem 0; margin-top: 2rem;">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <p>&copy; 2024 HeartGuard AI. All rights reserved.</p>
+                <div>
+                    <a href="#" class="btn btn-outline" style="margin-right: 0.5rem;"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="btn btn-outline" style="margin-right: 0.5rem;"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="btn btn-outline"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function showTab(tabName) {
+            document.getElementById('manualForm').style.display = tabName === 'manual' ? 'block' : 'none';
+            document.getElementById('csvForm').style.display = tabName === 'csv' ? 'block' : 'none';
+            document.getElementById('manualTab').classList.toggle('btn-primary', tabName === 'manual');
+            document.getElementById('csvTab').classList.toggle('btn-primary', tabName === 'csv');
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
+        }
+
+        // Check for saved theme preference or system preference
+        const savedTheme = localStorage.getItem('theme');
+        const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+            document.body.classList.add('dark-theme');
+        }
+    </script>
+</body>
+</html>
+
