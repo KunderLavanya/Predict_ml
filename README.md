@@ -87,7 +87,7 @@ License
 This project is open-source and available under the MIT License.
 
 About
-Developed by: [Your Name or Organization]
+Developed by:Lavanya, Ananya, Disha, Bhoomika
 
 markdown
 Copy code
